@@ -5,12 +5,12 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-	"time"
 )
 
-// colors
-
 var (
+
+	// colors
+
 	GreenB       = string([]byte{27, 91, 57, 55, 59, 52, 50, 109})
 	WhiteB       = string([]byte{27, 91, 57, 48, 59, 52, 55, 109})
 	YellowB      = string([]byte{27, 91, 57, 48, 59, 52, 51, 109})
@@ -28,6 +28,10 @@ var (
 	Cyan         = string([]byte{27, 91, 51, 54, 109})
 	Reset        = string([]byte{27, 91, 48, 109})
 	DisableColor = false
+
+	// common errors
+
+	Err1 = Red + "Invalid Command"
 )
 
 // Generate a Menu For A Command's Options
@@ -67,9 +71,9 @@ func Clear() {
 
 // Exiting the Framework
 func Goodbye() {
-	fmt.Println(Red + "sudo rm -rf /")
-	fmt.Println(RedB + "CRITICAL ERROR | YOUR MACHINE IS BROKEN | THIS IS NOT REPAIRABLE" + Reset)
-	time.Sleep(10 * time.Second)
+	//fmt.Println(Red + "sudo rm -rf /")
+	//fmt.Println(RedB + "CRITICAL ERROR | YOUR MACHINE IS BROKEN | THIS IS NOT REPAIRABLE" + Reset)
+	//time.Sleep(10 * time.Second)
 	fmt.Println(Yellow + "Exiting ml_console..." + Green + " goodbye")
 	os.Exit(0)
 }

@@ -3,11 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
-	cmdh "ml_console/cmd_handler"
-	sup "ml_console/support_functions"
 	"os"
 	"os/exec"
 	"strings"
+
+	cmdh "ml_console/cmd_handler"
+	sup "ml_console/support_functions"
 )
 
 var (
