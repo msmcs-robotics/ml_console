@@ -14,29 +14,30 @@ import (
 var (
 	// cmd list
 
-	C  = "clear"
-	H  = "help"
-	E  = "exit"
-	HH = "hosts"
-	S  = "shell"
-	D  = "data"
-	M  = "model"
+	C = "clear"
+	E = "exit"
 
-	c_d  = "clear screen"
-	h_d  = "Display this Menu"
-	e_d  = "Exit ml_console"
-	hh_d = "Manage Cluster"
-	s_d  = "Run Commands on Nodes"
-	d_d  = "Manage Datasets For Models"
-	m_d  = "Manage Models and DDP"
+	C_d = "clear screen"
+	H_d = "Display this Menu"
+	E_d = "Exit ml_console"
 )
 
 // Configure the Main menu, and generate using Make Menu from support functions
 
 func Main_menu() {
 	var menu_name = "Main Menu"
-	var menu_options = []string{C, H, E, HH, S, D, M}
-	var menu_options_desc = []string{c_d, h_d, e_d, hh_d, s_d, d_d, m_d}
+	var menu_options = []string{sup.Help, C, E,
+		m_hosts.Module_init_command,
+		m_shell.Module_init_command,
+		m_data.Module_init_command,
+		m_model.Module_init_command}
+
+	var menu_options_desc = []string{sup.Help_about, C_d, E_d,
+		m_hosts.Module_about,
+		m_shell.Module_about,
+		m_data.Module_about,
+		m_model.Module_about}
+
 	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Cyan, sup.Blue)
 }
 
@@ -49,33 +50,31 @@ func Main_Menu_logic(cmd string) {
 		if cmd == C {
 			sup.Clear()
 		}
-	} else if strings.Contains(cmd, H) {
-		if cmd == H {
-			Main_menu()
-		}
-	} else if strings.Contains(cmd, HH) {
-		if cmd == HH {
-			m_hosts.Hosts_Menu()
+	} else if cmd == sup.Help {
+		Main_menu()
+	} else if strings.Contains(cmd, m_hosts.Module_init_command) {
+		if cmd == m_hosts.Module_init_command {
+			m_hosts.Module_Menu()
 		} else {
-			m_hosts.Hosts_Menu_Logic(cmd)
+			m_hosts.Module_Menu_Logic(cmd)
 		}
-	} else if strings.Contains(cmd, S) {
-		if cmd == S {
-			m_shell.Shell_Menu()
+	} else if strings.Contains(cmd, m_shell.Module_init_command) {
+		if cmd == m_shell.Module_init_command {
+			m_shell.Module_Menu()
 		} else {
-			m_shell.Shell_Menu_Logic(cmd)
+			m_shell.Module_Menu_Logic(cmd)
 		}
-	} else if strings.Contains(cmd, D) {
-		if cmd == D {
-			m_data.Data_Menu()
+	} else if strings.Contains(cmd, m_data.Module_init_command) {
+		if cmd == m_data.Module_init_command {
+			m_data.Module_Menu()
 		} else {
-			m_data.Data_Menu_Logic(cmd)
+			m_data.Module_Menu_Logic(cmd)
 		}
-	} else if strings.Contains(cmd, M) {
-		if cmd == M {
-			m_model.Model_Menu()
+	} else if strings.Contains(cmd, m_model.Module_init_command) {
+		if cmd == m_model.Module_init_command {
+			m_model.Module_Menu()
 		} else {
-			m_model.Model_Menu_Logic(cmd)
+			m_model.Module_Menu_Logic(cmd)
 		}
 	} else {
 		fmt.Println(sup.Err1)

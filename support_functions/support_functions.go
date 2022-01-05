@@ -9,6 +9,11 @@ import (
 
 var (
 
+	// make help a global option
+
+	Help       = "help"
+	Help_about = "Display this menu"
+
 	// colors
 
 	GreenB       = string([]byte{27, 91, 57, 55, 59, 52, 50, 109})

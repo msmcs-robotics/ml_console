@@ -6,7 +6,8 @@ import (
 )
 
 var (
-	module_init_command = "data"
+	Module_init_command = "data"
+	Module_about        = "Manage Datasets For Models"
 
 	//cmd list
 
@@ -23,17 +24,28 @@ var (
 	c_d  = "See if a dataset was copied correctly"
 )
 
-func Data_Menu() {
-	var menu_name = "Hosts Module Menu"
-	var menu_options = []string{l, u, d, de, c}
-	var menu_options_desc = []string{l_d, u_d, d_d, de_d, c_d}
+func Module_Menu() {
+	var menu_name = "Data Module Menu"
+	var menu_options = []string{
+		sup.Help,
+		l,
+		u,
+		d,
+		de,
+		c}
+	var menu_options_desc = []string{
+		sup.Help_about,
+		l_d,
+		u_d,
+		d_d,
+		de_d,
+		c_d}
 	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Magenta, sup.Blue)
 }
 
-func Data_Menu_Logic(cmd string) {
+func Module_Menu_Logic(cmd string) {
 	// cut out Module initialization and first space
-	cmd = cmd[len(module_init_command)+1:]
-
+	cmd = cmd[len(Module_init_command)+1:]
 	if cmd == l {
 		fmt.Println(sup.Yellow + "List submodule in progress...")
 	} else if cmd == u {
@@ -44,6 +56,8 @@ func Data_Menu_Logic(cmd string) {
 		fmt.Println(sup.Yellow + "Delete submodule in progress...")
 	} else if cmd == c {
 		fmt.Println(sup.Yellow + "Check submodule in progress...")
+	} else if cmd == sup.Help {
+		Module_Menu()
 	} else {
 		fmt.Println(sup.Err1)
 	}

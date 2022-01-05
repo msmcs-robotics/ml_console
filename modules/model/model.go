@@ -6,7 +6,8 @@ import (
 )
 
 var (
-	module_init_command = "model"
+	Module_init_command = "model"
+	Module_about        = "Manage Models and DDP"
 
 	//cmd list
 
@@ -29,16 +30,34 @@ var (
 	r_d  = "results"
 )
 
-func Model_Menu() {
-	var menu_name = "Hosts Module Menu"
-	var menu_options = []string{l, u, d, de, c, t, tt, r}
-	var menu_options_desc = []string{l_d, u_d, d_d, de_d, c_d, t_d, tt_d, r_d}
+func Module_Menu() {
+	var menu_name = "Model Module Menu"
+	var menu_options = []string{
+		sup.Help,
+		l,
+		u,
+		d,
+		de,
+		c,
+		t,
+		tt,
+		r}
+	var menu_options_desc = []string{
+		sup.Help_about,
+		l_d,
+		u_d,
+		d_d,
+		de_d,
+		c_d,
+		t_d,
+		tt_d,
+		r_d}
 	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Magenta, sup.Blue)
 }
 
-func Model_Menu_Logic(cmd string) {
+func Module_Menu_Logic(cmd string) {
 	// cut out Module initialization and first space
-	cmd = cmd[len(module_init_command)+1:]
+	cmd = cmd[len(Module_init_command)+1:]
 
 	if cmd == l {
 		fmt.Println(sup.Yellow + "List submodule in progress...")
@@ -56,6 +75,8 @@ func Model_Menu_Logic(cmd string) {
 		fmt.Println(sup.Yellow + "Testing submodule in progress...")
 	} else if cmd == r {
 		fmt.Println(sup.Yellow + "Results submodule in progress...")
+	} else if cmd == sup.Help {
+		Module_Menu()
 	} else {
 		fmt.Println(sup.Err1)
 	}

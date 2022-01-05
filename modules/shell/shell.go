@@ -6,7 +6,8 @@ import (
 )
 
 var (
-	module_init_command = "shell"
+	Module_init_command = "shell"
+	Module_about        = "Run Commands on Nodes"
 
 	//cmd list
 
@@ -23,16 +24,28 @@ var (
 	ug_d = "Upgrade the OS of all nodes"
 )
 
-func Shell_Menu() {
-	var menu_name = "Hosts Module Menu"
-	var menu_options = []string{r, h, c, up, ug}
-	var menu_options_desc = []string{r_d, h_d, c_d, up_d, ug_d}
+func Module_Menu() {
+	var menu_name = "Shell Module Menu"
+	var menu_options = []string{
+		sup.Help,
+		r,
+		h,
+		c,
+		up,
+		ug}
+	var menu_options_desc = []string{
+		sup.Help_about,
+		r_d,
+		h_d,
+		c_d,
+		up_d,
+		ug_d}
 	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Magenta, sup.Blue)
 }
 
-func Shell_Menu_Logic(cmd string) {
+func Module_Menu_Logic(cmd string) {
 	// cut out Module initialization and first space
-	cmd = cmd[len(module_init_command)+1:]
+	cmd = cmd[len(Module_init_command)+1:]
 
 	if cmd == r {
 		fmt.Println(sup.Yellow + "Run submodule in progress...")
@@ -44,6 +57,8 @@ func Shell_Menu_Logic(cmd string) {
 		fmt.Println(sup.Yellow + "Update submodule in progress...")
 	} else if cmd == ug {
 		fmt.Println(sup.Yellow + "Upgrade submodule in progress...")
+	} else if cmd == sup.Help {
+		Module_Menu()
 	} else {
 		fmt.Println(sup.Err1)
 	}
