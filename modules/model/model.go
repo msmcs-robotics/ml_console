@@ -6,8 +6,14 @@ import (
 )
 
 var (
+
+	// String for cmd_handler to know to pass to this module
+
 	Module_init_command = "model"
-	Module_about        = "Manage Models and DDP"
+
+	// This is passed to cmd_handler to generate the Main Menu
+
+	Module_about = "Manage Models and DDP"
 
 	//cmd list
 
@@ -20,6 +26,8 @@ var (
 	tt = "test"
 	r  = "results"
 
+	// describe cmds for putting in menu
+
 	l_d  = "List Datasets Ready for Use"
 	u_d  = "Upload a dataset"
 	d_d  = "Downlaod a dataset"
@@ -31,6 +39,9 @@ var (
 )
 
 func Module_Menu() {
+
+	// see Make_Menu in support functions
+
 	var menu_name = "Model Module Menu"
 	var menu_options = []string{
 		sup.Help,
@@ -56,7 +67,7 @@ func Module_Menu() {
 }
 
 func Module_Menu_Logic(cmd string) {
-	// cut out Module initialization and first space
+	// cut out Module initialization string and first space
 	cmd = cmd[len(Module_init_command)+1:]
 
 	if cmd == l {

@@ -37,6 +37,9 @@ var (
 	// common errors
 
 	Err1 = Red + "Invalid Command"
+
+	// evenly space command descriptions in menus
+	tab_over = "            "
 )
 
 // Generate a Menu For A Command's Options
@@ -45,7 +48,9 @@ func Make_Menu(name string, options []string, options_desc []string, color1 stri
 	var menu_header = "\n" + color1 + "(" + name + ") \n\n"
 	var menu = ""
 	for o := 0; o < len(options); o++ {
-		menu += color1 + options[o] + "     " + color2 + options_desc[o] + "\n"
+		menu += color1 + options[o]
+		menu += tab_over[0 : len(tab_over)-len(options[o])]
+		menu += color2 + options_desc[o] + "\n"
 	}
 	fmt.Println(menu_header + menu)
 }

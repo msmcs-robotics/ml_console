@@ -6,8 +6,14 @@ import (
 )
 
 var (
+
+	// String for cmd_handler to know to pass to this module
+
 	Module_init_command = "shell"
-	Module_about        = "Run Commands on Nodes"
+
+	// This is passed to cmd_handler to generate the Main Menu
+
+	Module_about = "Run Commands on Nodes"
 
 	//cmd list
 
@@ -17,6 +23,8 @@ var (
 	up = "update"
 	ug = "upgrade"
 
+	// describe cmds for putting in menu
+
 	r_d  = "Run a shell command on all hosts"
 	h_d  = "Spawn an interactive ssh shell on specified host"
 	c_d  = "Run a series of system checks"
@@ -25,6 +33,9 @@ var (
 )
 
 func Module_Menu() {
+
+	// see Make_Menu in support functions
+
 	var menu_name = "Shell Module Menu"
 	var menu_options = []string{
 		sup.Help,
@@ -44,7 +55,7 @@ func Module_Menu() {
 }
 
 func Module_Menu_Logic(cmd string) {
-	// cut out Module initialization and first space
+	// cut out Module initialization string and first space
 	cmd = cmd[len(Module_init_command)+1:]
 
 	if cmd == r {

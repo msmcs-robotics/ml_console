@@ -6,8 +6,14 @@ import (
 )
 
 var (
+
+	// String for cmd_handler to know to pass to this module
+
 	Module_init_command = "hosts"
-	Module_about        = "Manage Cluster"
+
+	// This is passed to cmd_handler to generate the Main Menu
+
+	Module_about = "Manage Cluster"
 
 	//cmd list
 
@@ -16,6 +22,8 @@ var (
 	d = "delete"
 	c = "check"
 
+	// describe cmds for putting in menu
+
 	l_d = "List hosts connected to cluster"
 	a_d = "Add a host to the cluster"
 	d_d = "Delete a host from the cluster"
@@ -23,6 +31,9 @@ var (
 )
 
 func Module_Menu() {
+
+	// see Make_Menu in support functions
+
 	var menu_name = "Hosts Module Menu"
 	var menu_options = []string{
 		sup.Help,
@@ -40,7 +51,7 @@ func Module_Menu() {
 }
 
 func Module_Menu_Logic(cmd string) {
-	// cut out Module initialization and first space
+	// cut out Module initialization string and first space
 	cmd = cmd[len(Module_init_command)+1:]
 
 	if cmd == l {

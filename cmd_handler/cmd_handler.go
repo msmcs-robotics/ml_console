@@ -17,13 +17,14 @@ var (
 	C = "clear"
 	E = "exit"
 
+	// describe cmds for putting in menu
+
 	C_d = "clear screen"
 	H_d = "Display this Menu"
 	E_d = "Exit ml_console"
 )
 
-// Configure the Main menu, and generate using Make Menu from support functions
-
+// Configure the Main menu, and generate using 'Make_Menu' from support functions
 func Main_menu() {
 	var menu_name = "Main Menu"
 	var menu_options = []string{sup.Help, C, E,
@@ -41,6 +42,8 @@ func Main_menu() {
 	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Cyan, sup.Blue)
 }
 
+// Basically sanatize commands and pass to respective modules
+// The modules have built-in logic to further analyze the commands
 func Main_Menu_logic(cmd string) {
 	if strings.Contains(cmd, E) {
 		if cmd == E {
