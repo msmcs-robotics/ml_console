@@ -3,6 +3,21 @@
 > A Modular Framework for Managing Distributed Nueral Networks
 ----------------------------------------------------------------
 
+## Dependencies
+
+1. **Build**
+
+In order to build this framework, you need go version 1.17 or later.
+
+2. **Install**
+
+These tools are a neccessity for scripts to execute properly.
+The listed command is for Ubuntu 20.04.
+
+```
+sudo apt install -fy ssh-client
+```
+
 ## A High Level Overview
 
  - Written in Go, this framework automates the creation, customization, and execution of Ansible Playbooks. 

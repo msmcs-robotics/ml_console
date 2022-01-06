@@ -2,13 +2,11 @@ package shell
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	inst "ml_console/installer"
 	hosts "ml_console/modules/hosts"
-	"ml_console/modules/shell/submodules/uno_ssh"
-	unossh "ml_console/modules/shell/submodules/uno_ssh"
+	uno "ml_console/modules/shell/submodules/uno_ssh"
 	sup "ml_console/support_functions"
 )
 
@@ -40,9 +38,6 @@ var (
 	c_d  = "Run a series of system checks"
 	up_d = "Update the app repositories of all nodes"
 	ug_d = "Upgrade the OS of all nodes"
-
-	//ID Check
-	Invalid_id = "invalid_id"
 )
 
 func Module_Menu() {
@@ -88,24 +83,10 @@ func Module_Menu_Logic(cmd string) {
 	}
 }
 
-func CheckId(id string) string {
-	// if not empty
-	id = id[len("host"):]
-	if len(id) > 0 {
-		id = id[len(" "):]
-		if len(id) > 0 {
-			i, _ := strconv.Atoi(id)
-			if i <= hosts.Num_Hosts() && i >= 0 {
-				return fmt.Sprint(i)
-			}
-		}
-	}
-	return Invalid_id
-}
-
 func Connect(id string) {
-	id = CheckId(id)
-	if id != Invalid_id {
+	mod := "host"
+	id = hosts.CheckId(mod, id)
+	if id != hosts.Invalid_id {
 		host := sup.Search_line(inst.Install_Config, "host_"+id)
 		user := sup.Search_line(inst.Install_Config, "ssh_user_"+id)
 		passw := sup.Search_line(inst.Install_Config, "ssh_pass_"+id)
@@ -114,11 +95,11 @@ func Connect(id string) {
 		user = user[len("ssh_user_"+id+"::"):]
 		passw = passw[len("ssh_pass_"+id+"::"):]
 		port = port[len("ssh_port::"):]
-		err := unossh.Uno_ssh(host, user, passw, port)
-		if err == unossh.Not_Connected {
-			fmt.Println(uno_ssh.Err1 + host + "...")
+		err := uno.Uno(host, user, passw, port)
+		if err == uno.Not_Connected {
+			fmt.Println(uno.Err1 + host + "...")
 		}
 	} else {
-		fmt.Println(uno_ssh.Err2)
+		fmt.Println(hosts.Err1)
 	}
 }

@@ -60,7 +60,7 @@ func Make_Menu(name string, options []string, options_desc []string, color1 stri
 	for o := 0; o < len(options); o++ {
 		menu += color1 + options[o]
 		menu += tab_over[0 : len(tab_over)-len(options[o])]
-		menu += color2 + options_desc[o] + "\n"
+		menu += color2 + options_desc[o] + "\n\n"
 	}
 	fmt.Println(menu_header + menu)
 }

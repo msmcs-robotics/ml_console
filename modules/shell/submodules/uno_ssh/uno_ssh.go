@@ -8,7 +8,6 @@ package uno_ssh
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -23,18 +22,17 @@ var (
 	c = "clear"
 	e = "exit"
 
-	Connected     = "Connected"
+	Am_Connected  = "Am_Connected"
 	Not_Connected = "Not Connected"
 	Err1          = "Unable to Connect to "
-	Err2          = "invalid host, please see 'hosts list'"
 )
 
-func Uno_ssh(host string, user string, passw string, port string) string {
+func Uno(host string, user string, passw string, port string) string {
 	cmdprompt := sup.Green + host + " > " + sup.White
 
 	client, err := goph.New(user, host, goph.Password(passw))
 	if err != nil {
-		log.Fatal(err)
+
 		return Not_Connected
 	}
 	defer client.Close()
@@ -49,12 +47,9 @@ func Uno_ssh(host string, user string, passw string, port string) string {
 	if cmdString == c {
 		sup.Clear()
 	} else if cmdString == e {
-		return Connected
+		return Am_Connected
 	} else {
-		out, err := client.Run(cmdString)
-		if err != nil {
-			log.Fatal(err)
-		}
+		out, _ := client.Run(cmdString)
 		fmt.Println(string(out))
 	}
 	for {
@@ -67,14 +62,11 @@ func Uno_ssh(host string, user string, passw string, port string) string {
 		if cmdString == c {
 			sup.Clear()
 		} else if cmdString == e {
-			return Connected
+			return Am_Connected
 		} else {
-			out, err := client.Run(cmdString)
-			if err != nil {
-				log.Fatal(err)
-			}
+			out, _ := client.Run(cmdString)
 			fmt.Println(string(out))
 		}
 	}
-	return Connected
+	return Am_Connected
 }
