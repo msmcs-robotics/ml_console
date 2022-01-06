@@ -1,10 +1,14 @@
 package support_functions
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 var (
@@ -37,14 +41,20 @@ var (
 	// common errors
 
 	Err1 = Red + "Invalid Command"
+	Err2 = Red + "Invalid Option"
 
-	// evenly space command descriptions in menus
-	tab_over = "            "
+	//FS Reports
+	Not_Found = "Not Found"
+	Found     = "Found"
+	Copys     = "File Copied Successfully"
+	Copyn     = "File Not Copied"
+	Appn      = "Could not Append to File"
+	Appy      = "Appended to File"
 )
 
 // Generate a Menu For A Command's Options
 
-func Make_Menu(name string, options []string, options_desc []string, color1 string, color2 string) {
+func Make_Menu(name string, options []string, options_desc []string, color1 string, color2 string, tab_over string) {
 	var menu_header = "\n" + color1 + "(" + name + ") \n\n"
 	var menu = ""
 	for o := 0; o < len(options); o++ {
@@ -86,4 +96,95 @@ func Goodbye() {
 	//time.Sleep(10 * time.Second)
 	fmt.Println(Yellow + "Exiting ml_console..." + Green + " goodbye")
 	os.Exit(0)
+}
+
+// Ask a Question
+func Ask(question string) string {
+	fmt.Print(Blue + "\n" + question + Cyan)
+	var ans string
+	fmt.Scanln(&ans)
+	return ans
+}
+func Askint(question string) int {
+	fmt.Print(Blue + "\n")
+	fmt.Print(question)
+	fmt.Print(Cyan)
+	var ans int
+	fmt.Scanln(&ans)
+	return ans
+}
+
+//Check if a file exists
+func Check_File(file string) string {
+	if _, err := os.Stat(file); err != nil {
+		return Not_Found
+	} else {
+		return Found
+	}
+}
+
+//Copy File
+func Copy_File(file1 string, file2 string) string {
+	filedata, err1 := os.Open(file1)
+	if err1 != nil {
+		log.Fatal(err1)
+		fmt.Println(err1)
+		return Copyn
+	}
+	defer filedata.Close()
+	filedata_new, err2 := os.Create(file2)
+	if err2 != nil {
+		log.Fatal(err2)
+		fmt.Println(err2)
+		return Copyn
+	}
+	defer filedata_new.Close()
+	_, err3 := io.Copy(filedata_new, filedata)
+	if err3 != nil {
+		log.Fatal(err3)
+		fmt.Println(err3)
+		return Copyn
+	}
+	return Copys
+}
+
+//Add to file
+func Add2file(filename string, data string) string {
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+		fmt.Println(err)
+		return Appn
+	}
+	_, err2 := file.WriteString(data)
+	if err2 != nil {
+		log.Fatal(err)
+		fmt.Println(err)
+		return Appn
+	}
+	defer file.Close()
+	return Appy
+}
+
+//Search for line in file
+func Search_line(filename string, search string) string {
+	line := ""
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line = scanner.Text()
+		if strings.Contains(line, search) {
+			return line
+		}
+	}
+	return Not_Found
+}
+
+func Pause() {
+	fmt.Print("Press Enter to Continue...")
+	fmt.Scanln()
 }

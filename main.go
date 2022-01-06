@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	cmdh "ml_console/cmd_handler"
@@ -18,21 +17,19 @@ var (
 func main() {
 	sup.Clear()
 	fmt.Println(sup.Green + "Initializing ml_console...")
-	fmt.Println(sup.Green + "Press Enter to Start Shell..." + sup.Blue)
+	fmt.Println(sup.Green + "Type 'help' to get started...")
 	console()
 }
 
 func console() {
 	reader := bufio.NewReader(os.Stdin)
+	fmt.Print(cmdprompt)
 	cmdString, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 	cmdString = strings.TrimSuffix(cmdString, "\n")
-	cmd := exec.Command(cmdString)
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+	cmdh.Main_Menu_logic(cmdString)
 	for {
 		fmt.Print(cmdprompt)
 		cmdString, err := reader.ReadString('\n')

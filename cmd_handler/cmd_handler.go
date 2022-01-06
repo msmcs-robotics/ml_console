@@ -8,6 +8,8 @@ import (
 	m_hosts "ml_console/modules/hosts"
 	m_model "ml_console/modules/model"
 	m_shell "ml_console/modules/shell"
+
+	inst "ml_console/installer"
 	sup "ml_console/support_functions"
 )
 
@@ -22,6 +24,9 @@ var (
 	C_d = "clear screen"
 	H_d = "Display this Menu"
 	E_d = "Exit ml_console"
+
+	// evenly space command descriptions in menus
+	tab_over = "            "
 )
 
 // Configure the Main menu, and generate using 'Make_Menu' from support functions
@@ -39,7 +44,15 @@ func Main_menu() {
 		m_data.Module_about,
 		m_model.Module_about}
 
-	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Cyan, sup.Blue)
+	// Check For Config File
+	var install = sup.Check_File(inst.Install_Config)
+	if install == sup.Not_Found {
+		fmt.Println(inst.Err1)
+		menu_options = append(menu_options, inst.Module_init_command)
+		menu_options_desc = append(menu_options_desc, inst.Module_about)
+	}
+
+	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Cyan, sup.Blue, tab_over)
 }
 
 // Basically sanatize commands and pass to respective modules
@@ -78,6 +91,12 @@ func Main_Menu_logic(cmd string) {
 			m_model.Module_Menu()
 		} else {
 			m_model.Module_Menu_Logic(cmd)
+		}
+	} else if strings.Contains(cmd, inst.Module_init_command) {
+		if cmd == inst.Module_init_command {
+			inst.Begin_Install()
+		} else {
+			inst.Module_Menu_Logic(cmd)
 		}
 	} else {
 		fmt.Println(sup.Err1)

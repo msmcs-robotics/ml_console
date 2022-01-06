@@ -15,6 +15,9 @@ var (
 
 	Module_about = "Manage Models and DDP"
 
+	// evenly space command descriptions in menus
+	tab_over = "            "
+
 	//cmd list
 
 	l  = "list"
@@ -63,7 +66,7 @@ func Module_Menu() {
 		t_d,
 		tt_d,
 		r_d}
-	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Magenta, sup.Blue)
+	sup.Make_Menu(menu_name, menu_options, menu_options_desc, sup.Magenta, sup.Blue, tab_over)
 }
 
 func Module_Menu_Logic(cmd string) {
