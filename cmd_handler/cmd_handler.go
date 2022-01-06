@@ -2,6 +2,8 @@ package cmd_handler
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
 	"strings"
 
 	m_data "ml_console/modules/data"
@@ -21,7 +23,7 @@ var (
 
 	// describe cmds for putting in menu
 
-	C_d = "clear screen"
+	C_d = "Clear screen"
 	H_d = "Display this Menu"
 	E_d = "Exit ml_console"
 
@@ -57,7 +59,8 @@ func Main_menu() {
 
 // Basically sanatize commands and pass to respective modules
 // The modules have built-in logic to further analyze the commands
-func Main_Menu_logic(cmd string) {
+func Main_Menu_logic(cmd string) string {
+	cmd = strings.TrimSuffix(cmd, "\n")
 	if strings.Contains(cmd, E) {
 		if cmd == E {
 			sup.Goodbye()
@@ -99,6 +102,17 @@ func Main_Menu_logic(cmd string) {
 			inst.Module_Menu_Logic(cmd)
 		}
 	} else {
+		return sup.Err1
+	}
+	return "ok"
+}
+
+func Host_Shell(cmdString string) {
+	fmt.Print(sup.White)
+	cmd := exec.Command("sh", "-c", cmdString)
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	if err := cmd.Run(); err != nil {
 		fmt.Println(sup.Err1)
 	}
 }

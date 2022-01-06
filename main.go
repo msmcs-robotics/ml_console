@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	cmdh "ml_console/cmd_handler"
 	sup "ml_console/support_functions"
@@ -28,15 +27,21 @@ func console() {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
-	cmdString = strings.TrimSuffix(cmdString, "\n")
-	cmdh.Main_Menu_logic(cmdString)
+	run := cmdh.Main_Menu_logic(cmdString)
+	if run == sup.Err1 {
+		if run == sup.Err1 {
+			cmdh.Host_Shell(cmdString)
+		}
+	}
 	for {
 		fmt.Print(cmdprompt)
 		cmdString, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
-		cmdString = strings.TrimSuffix(cmdString, "\n")
-		cmdh.Main_Menu_logic(cmdString)
+		run := cmdh.Main_Menu_logic(cmdString)
+		if run == sup.Err1 {
+			cmdh.Host_Shell(cmdString)
+		}
 	}
 }

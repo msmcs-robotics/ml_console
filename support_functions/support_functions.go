@@ -162,7 +162,7 @@ func Add2file(filename string, data string) string {
 		fmt.Println(err)
 		return Appn
 	}
-	defer file.Close()
+	file.Close()
 	return Appy
 }
 

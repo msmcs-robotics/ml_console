@@ -2,7 +2,6 @@ package installer
 
 import (
 	"fmt"
-	"log"
 	sup "ml_console/support_functions"
 	"os"
 )
@@ -51,13 +50,13 @@ func new_install() {
 	if install == sup.Found {
 		err := os.Remove(Install_Config)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 			new_install()
 		}
 	}
 	_, err := os.Create(Install_Config)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		new_install()
 	}
 	// get num hosts
@@ -111,21 +110,21 @@ func new_install() {
 	a = sup.Ask(Q6)
 	if a == y {
 		a = sup.Ask(Q7)
-		for i := 0; i < Num_Hosts; i++ {
+		for i := 1; i < Num_Hosts+1; i++ {
 			d := sup.Add2file(Install_Config, "ssh_user_"+fmt.Sprint(i)+"::"+a+"\n")
 			if d == sup.Appn {
 				fmt.Println(sup.Appn)
 			}
 		}
 		a = sup.Ask(Q8)
-		for i := 0; i < Num_Hosts; i++ {
+		for i := 1; i < Num_Hosts+1; i++ {
 			d = sup.Add2file(Install_Config, "ssh_pass_"+fmt.Sprint(i)+"::"+a+"\n")
 			if d == sup.Appn {
 				fmt.Println(sup.Appn)
 			}
 		}
 	} else if a == n {
-		for i := 0; i < Num_Hosts; i++ {
+		for i := 1; i < Num_Hosts+1; i++ {
 			a = sup.Ask(Q9 + sup.Cyan + fmt.Sprint(i) + sup.Blue + "> ")
 			d := sup.Add2file(Install_Config, "usr_"+fmt.Sprint(i)+"::"+a+"\n")
 			if d == sup.Appn {

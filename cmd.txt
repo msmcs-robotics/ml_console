@@ -1,0 +1,1 @@
+chmod 777 /msmcs-robotics/ml_console/poker.sh; 
