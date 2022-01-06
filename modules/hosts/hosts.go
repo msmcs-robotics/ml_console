@@ -88,6 +88,11 @@ func List_Hosts() {
 
 	nh := Num_Hosts()
 
+	host_ips = append(host_ips, "IP Address")
+	options = append(options, "ID")
+	host_ips = append(host_ips, "")
+	options = append(options, "")
+
 	hid := 1
 	for i := 0; i < nh; i++ {
 		host_ip := sup.Search_line(inst.Install_Config, "host_"+fmt.Sprint(hid))

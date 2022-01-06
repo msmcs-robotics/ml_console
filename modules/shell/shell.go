@@ -7,6 +7,8 @@ import (
 
 	inst "ml_console/installer"
 	hosts "ml_console/modules/hosts"
+	"ml_console/modules/shell/submodules/uno_ssh"
+	unossh "ml_console/modules/shell/submodules/uno_ssh"
 	sup "ml_console/support_functions"
 )
 
@@ -41,14 +43,6 @@ var (
 
 	//ID Check
 	Invalid_id = "invalid_id"
-
-	//Test SSH
-	Connected     = "Connected"
-	Not_Connected = "Not Connected"
-
-	//Errs
-	Err1 = sup.Red + "Could not connect to "
-	Err2 = sup.Red + "Please Enter a valid host ID\nSee 'hosts list' to select id"
 )
 
 func Module_Menu() {
@@ -120,23 +114,11 @@ func Connect(id string) {
 		user = user[len("ssh_user_"+id+"::"):]
 		passw = passw[len("ssh_pass_"+id+"::"):]
 		port = port[len("ssh_port::"):]
-		fmt.Println("Connecting to " + host + "...")
-
-		err := SSH(host, user, passw, port)
-		if err == Not_Connected {
-			fmt.Println(Err1 + host)
-			fmt.Println("SSH submodule in progress...")
+		err := unossh.Uno_ssh(host, user, passw, port)
+		if err == unossh.Not_Connected {
+			fmt.Println(uno_ssh.Err1 + host + "...")
 		}
 	} else {
-		fmt.Println(Err2)
+		fmt.Println(uno_ssh.Err2)
 	}
-}
-
-func SSH(host string, user string, passw string, port string) string {
-	return Not_Connected
-}
-
-func Init_ssh(host string, user string, pass string, port string) string {
-	fmt.Println(Connected)
-	return Connected
 }

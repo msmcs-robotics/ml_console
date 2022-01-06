@@ -35,6 +35,7 @@ var (
 
 	//New Install
 	Q3  = "How many hosts are in your cluster?> "
+	Q13 = "What Terminal would you like to use for ssh sessions? (Example: xterm)> "
 	Q4  = "Do you use port 22 for SSH? y/n> "
 	Q5  = "Enter SSH port to use> "
 	Q6  = "Do all your hosts use the same ssh credentials? y/n> "
@@ -63,19 +64,35 @@ func new_install() {
 	// get num hosts
 	d := sup.Add2file(Install_Config, "\n\n ---------- Number of Hosts ---------- \n\n")
 	if d == sup.Appn {
+		sup.Clear()
 		fmt.Println(sup.Appn)
 		new_install()
 	}
 	Num_Hosts := sup.Askint(Q3)
 	d = sup.Add2file(Install_Config, "Num_Hosts::"+fmt.Sprint(Num_Hosts))
 	if d == sup.Appn {
+		sup.Clear()
 		fmt.Println(sup.Appn)
 		new_install()
 	}
-
+	// select terminal
+	d = sup.Add2file(Install_Config, "\n\n ---------- Terminal ---------- \n\n")
+	if d == sup.Appn {
+		sup.Clear()
+		fmt.Println(sup.Appn)
+		new_install()
+	}
+	Terminal := sup.Ask(Q13)
+	d = sup.Add2file(Install_Config, "Terminal::"+fmt.Sprint(Terminal))
+	if d == sup.Appn {
+		sup.Clear()
+		fmt.Println(sup.Appn)
+		new_install()
+	}
 	// get ssh port
 	d = sup.Add2file(Install_Config, "\n\n ---------- SSH PORT ---------- \n\n")
 	if d == sup.Appn {
+		sup.Clear()
 		fmt.Println(sup.Appn)
 		new_install()
 	}
@@ -83,6 +100,7 @@ func new_install() {
 	if a == y {
 		d := sup.Add2file(Install_Config, "ssh_port::"+"22")
 		if d == sup.Appn {
+			sup.Clear()
 			fmt.Println(sup.Appn)
 			new_install()
 		}
@@ -90,10 +108,12 @@ func new_install() {
 		o := sup.Askint(Q5)
 		d := sup.Add2file(Install_Config, "ssh_port::"+fmt.Sprint(o))
 		if d == sup.Appn {
+			sup.Clear()
 			fmt.Println(sup.Appn)
 			new_install()
 		}
 	} else {
+		sup.Clear()
 		fmt.Println(sup.Err2)
 		new_install()
 	}
@@ -188,7 +208,6 @@ func previous_install() {
 }
 
 func Begin_Install() {
-	sup.Clear()
 	fmt.Println(sup.Yellow + "Starting Installer...")
 	var prev = sup.Ask(Q1)
 	if prev == y {
@@ -196,6 +215,7 @@ func Begin_Install() {
 	} else if prev == n {
 		new_install()
 	} else {
+		sup.Clear()
 		fmt.Println(sup.Err2)
 		Begin_Install()
 	}
