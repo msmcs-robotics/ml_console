@@ -332,7 +332,6 @@ func Poke(init_id string) {
 			fmt.Println(sup.Green + "Generating...")
 			gen_poker_script(cmd_file)
 		}
-		o := 1
 		cmd := ""
 		d = sup.Add2file(cmd_file, "chmod 777 "+pwd+"/"+poker_script+"; ")
 		if d == sup.Appn {
@@ -349,7 +348,6 @@ func Poke(init_id string) {
 				if d == sup.Appn {
 					fmt.Println(sup.Appn)
 				}
-				o++
 			}
 		}
 		exec.Command("chmod 777 " + cmd_file)

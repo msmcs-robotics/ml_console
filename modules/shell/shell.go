@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	hosts "ml_console/modules/hosts"
+	trs "ml_console/modules/shell/submodules/transfer"
 	uno "ml_console/modules/shell/submodules/uno_ssh"
 	sup "ml_console/support_functions"
 )
@@ -26,6 +27,7 @@ var (
 
 	r  = "run"
 	h  = "host"
+	u  = "up"
 	c  = "check"
 	up = "update"
 	ug = "upgrade"
@@ -34,9 +36,15 @@ var (
 
 	r_d  = "Run a shell command on all hosts"
 	h_d  = "Spawn an interactive ssh shell on specified host"
+	u_d  = "Upload a dataset"
 	c_d  = "Run a series of system checks"
 	up_d = "Update the app repositories of all nodes"
 	ug_d = "Upgrade the OS of all nodes"
+
+	Done = "Upload Complete"
+	//Errs
+	Err1 = sup.Red + "scp up/down commands require a hostID, src, and dest file"
+	Err2 = sup.Red + "Options are limited to a hostID, src, and dest file"
 )
 
 func Module_Menu() {
@@ -48,6 +56,7 @@ func Module_Menu() {
 		sup.Help,
 		r,
 		h,
+		u,
 		c,
 		up,
 		ug}
@@ -55,6 +64,7 @@ func Module_Menu() {
 		sup.Help_about,
 		r_d,
 		h_d,
+		u_d,
 		c_d,
 		up_d,
 		ug_d}
@@ -69,6 +79,8 @@ func Module_Menu_Logic(cmd string) {
 		fmt.Println(sup.Yellow + "Run submodule in progress...")
 	} else if strings.Contains(cmd, h) {
 		Connect(cmd)
+	} else if strings.Contains(cmd, u) {
+		transfer(cmd)
 	} else if cmd == c {
 		fmt.Println(sup.Yellow + "Check submodule in progress...")
 	} else if cmd == up {
@@ -97,4 +109,45 @@ func Connect(id string) {
 	} else {
 		fmt.Println(hosts.Err1)
 	}
+}
+
+func transfer(cmd string) string {
+	args := strings.Fields(cmd)
+
+	if len(args) < 4 {
+		fmt.Println(Err1)
+		return Err1
+	} else if len(args) > 4 {
+		fmt.Println(Err2)
+		return Err2
+	}
+	// hostid, src, dest
+	init_id := args[1]
+	src := args[2]
+	dest := args[3]
+
+	if init_id == "all" {
+		for i := 1; i < hosts.Num_Host_IDs(); i++ {
+			id := hosts.CheckId_no_mod(fmt.Sprint(i + 1))
+			if id != hosts.Invalid_id {
+				host := hosts.Get_Host(id)
+				user := hosts.Get_User(id)
+				passw := hosts.Get_Passw(id)
+				port := hosts.Get_Port(id)
+				trs.Up(host, user, passw, port, src, dest)
+			}
+		}
+	} else {
+		id := hosts.CheckId_no_mod(init_id)
+		if id != hosts.Invalid_id {
+			host := hosts.Get_Host(id)
+			user := hosts.Get_User(id)
+			passw := hosts.Get_Passw(id)
+			port := hosts.Get_Port(id)
+			trs.Up(host, user, passw, port, src, dest)
+		} else {
+			fmt.Println(hosts.Err1)
+		}
+	}
+	return Done
 }

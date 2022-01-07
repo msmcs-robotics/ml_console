@@ -2,11 +2,7 @@ package data
 
 import (
 	"fmt"
-	inst "ml_console/installer"
-	trs "ml_console/modules/data/submodules/transfer"
-	hosts "ml_console/modules/hosts"
 	sup "ml_console/support_functions"
-	"strconv"
 	"strings"
 )
 
@@ -73,7 +69,7 @@ func Module_Menu_Logic(cmd string) {
 	if cmd == l {
 		fmt.Println(sup.Yellow + "List submodule in progress...")
 	} else if strings.Contains(cmd, u) {
-		transfer(cmd)
+		fmt.Println(sup.Yellow + "Upload submodule in progress...")
 	} else if cmd == de {
 		fmt.Println(sup.Yellow + "Delete submodule in progress...")
 	} else if cmd == c {
@@ -83,55 +79,4 @@ func Module_Menu_Logic(cmd string) {
 	} else {
 		fmt.Println(sup.Err1)
 	}
-}
-
-func Num_Hosts() int {
-	str_hosts := sup.Search_line(inst.Install_Config, "Num_Hosts")
-	str_hosts = str_hosts[11:]
-	nh, _ := strconv.Atoi(str_hosts)
-	return nh
-}
-
-func transfer(cmd string) string {
-	args := strings.Fields(cmd)
-
-	if len(args) < 4 {
-		fmt.Println(Err1)
-		return Err1
-	} else if len(args) > 4 {
-		fmt.Println(Err2)
-		return Err2
-	}
-	// hostid, src, dest
-	init_id := args[1]
-	src := args[2]
-	dest := args[3]
-
-	if init_id == "all" {
-		o := 1
-		for i := 0; i < Num_Hosts(); i++ {
-			id := fmt.Sprint(o)
-			host := hosts.Get_Host(id)
-			user := hosts.Get_User(id)
-			passw := hosts.Get_Passw(id)
-			port := hosts.Get_Port(id)
-			trs.Up(host, user, passw, port, src, dest)
-			if d == sup.Appn {
-				fmt.Println(sup.Appn)
-			}
-			o++
-		}
-	} else {
-		id := hosts.CheckId_no_mod(init_id)
-		if id != hosts.Invalid_id {
-			host := hosts.Get_Host(id)
-			user := hosts.Get_User(id)
-			passw := hosts.Get_Passw(id)
-			port := hosts.Get_Port(id)
-			trs.Up(host, user, passw, port, src, dest)
-		} else {
-			fmt.Println(hosts.Err1)
-		}
-	}
-	return Done
 }
