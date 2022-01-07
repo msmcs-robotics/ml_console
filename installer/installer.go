@@ -35,13 +35,13 @@ var (
 	//New Install
 	Q3  = "How many hosts are in your cluster?> "
 	Q4  = "Do you use port 22 for SSH? y/n> "
-	Q5  = "Enter SSH port to use> "
+	Q5  = "Enter SSH port for host "
 	Q6  = "Do all your hosts use the same ssh credentials? y/n> "
 	Q7  = "Enter access user> "
 	Q8  = "Enter access pass> "
-	Q9  = "Enter access user for host"
-	Q10 = "Enter access password for host"
-	Q11 = "Enter address of host"
+	Q9  = "Enter access user for host "
+	Q10 = "Enter access password for host "
+	Q11 = "Enter address of host "
 	Q12 = "Is this information correct? y/n> "
 )
 
@@ -60,41 +60,35 @@ func new_install() {
 		new_install()
 	}
 	// get num hosts
-	d := sup.Add2file(Install_Config, "\n\n ---------- Number of Hosts ---------- \n\n")
+	Num_Hosts := sup.Askint(Q3)
+	d := sup.Add2file(Install_Config, "Num_Hosts::"+fmt.Sprint(Num_Hosts)+"\n")
 	if d == sup.Appn {
 		sup.Clear()
 		fmt.Println(sup.Appn)
 		new_install()
 	}
-	Num_Hosts := sup.Askint(Q3)
-	d = sup.Add2file(Install_Config, "Num_Hosts::"+fmt.Sprint(Num_Hosts))
+	d = sup.Add2file(Install_Config, "Num_Host_IDs::"+fmt.Sprint(Num_Hosts)+"\n")
 	if d == sup.Appn {
 		sup.Clear()
 		fmt.Println(sup.Appn)
 		new_install()
 	}
 	// get ssh port
-	d = sup.Add2file(Install_Config, "\n\n ---------- SSH PORT ---------- \n\n")
-	if d == sup.Appn {
-		sup.Clear()
-		fmt.Println(sup.Appn)
-		new_install()
-	}
 	a := sup.Ask(Q4)
 	if a == y {
-		d := sup.Add2file(Install_Config, "ssh_port::"+"22")
-		if d == sup.Appn {
-			sup.Clear()
-			fmt.Println(sup.Appn)
-			new_install()
+		for i := 1; i < Num_Hosts+1; i++ {
+			d := sup.Add2file(Install_Config, "ssh_port_"+fmt.Sprint(i)+"::22\n")
+			if d == sup.Appn {
+				fmt.Println(sup.Appn)
+			}
 		}
 	} else if a == n {
-		o := sup.Askint(Q5)
-		d := sup.Add2file(Install_Config, "ssh_port::"+fmt.Sprint(o))
-		if d == sup.Appn {
-			sup.Clear()
-			fmt.Println(sup.Appn)
-			new_install()
+		for i := 1; i < Num_Hosts+1; i++ {
+			a = sup.Ask(Q5 + sup.Cyan + fmt.Sprint(i) + sup.Blue + "> ")
+			d := sup.Add2file(Install_Config, "ssh_port_"+fmt.Sprint(i)+"::"+a+"\n")
+			if d == sup.Appn {
+				fmt.Println(sup.Appn)
+			}
 		}
 	} else {
 		sup.Clear()
@@ -103,10 +97,6 @@ func new_install() {
 	}
 
 	// get ssh creds
-	d = sup.Add2file(Install_Config, "\n\n ---------- SSH CREDS ---------- \n\n")
-	if d == sup.Appn {
-		fmt.Println(sup.Appn)
-	}
 	a = sup.Ask(Q6)
 	if a == y {
 		a = sup.Ask(Q7)
@@ -126,12 +116,12 @@ func new_install() {
 	} else if a == n {
 		for i := 1; i < Num_Hosts+1; i++ {
 			a = sup.Ask(Q9 + sup.Cyan + fmt.Sprint(i) + sup.Blue + "> ")
-			d := sup.Add2file(Install_Config, "usr_"+fmt.Sprint(i)+"::"+a+"\n")
+			d := sup.Add2file(Install_Config, "ssh_user_"+fmt.Sprint(i)+"::"+a+"\n")
 			if d == sup.Appn {
 				fmt.Println(sup.Appn)
 			}
 			a = sup.Ask(Q10 + sup.Cyan + fmt.Sprint(i) + sup.Blue + "> ")
-			d = sup.Add2file(Install_Config, "passw_"+fmt.Sprint(i)+"::"+a+"\n")
+			d = sup.Add2file(Install_Config, "ssh_pass_"+fmt.Sprint(i)+"::"+a+"\n")
 			if d == sup.Appn {
 				fmt.Println(sup.Appn)
 			}
@@ -142,10 +132,6 @@ func new_install() {
 	}
 
 	// add host addresses
-	d = sup.Add2file(Install_Config, "\n\n ---------- HOST ADDRESSES ---------- \n\n")
-	if d == sup.Appn {
-		fmt.Println(sup.Appn)
-	}
 	fmt.Println("\n You are able to copy and paste a list of ip addresses, just press enter when done...")
 	for i := 1; i < Num_Hosts+1; i++ {
 		a = sup.Ask(Q11 + sup.Cyan + fmt.Sprint(i) + sup.Blue + "> ")

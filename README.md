@@ -15,7 +15,7 @@ These tools are a neccessity for scripts to execute properly.
 The listed command is for Ubuntu 20.04.
 
 ```
-sudo apt install -fy ssh-client
+sudo apt install -fy ssh-client sed
 ```
 
 ## A High Level Overview

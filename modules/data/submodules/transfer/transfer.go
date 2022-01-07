@@ -64,8 +64,3 @@ func Up(host string, user string, pass string, port string, src string, dest str
 	//}
 	return succ
 }
-
-func Down(host string, user string, pass string, port string, src string, dest string) {
-	fmt.Println(sup.Green + "Downloading from " + host + "...")
-	fmt.Println(sup.Green + "Downloaded from " + host + " to " + dest)
-}

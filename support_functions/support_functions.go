@@ -166,8 +166,26 @@ func Add2file(filename string, data string) string {
 	return Appy
 }
 
-//Search for line in file
+// Search for line in file
 func Search_line(filename string, search string) string {
+	line := ""
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line = scanner.Text()
+		if strings.Contains(line, search) {
+			return line
+		}
+	}
+	return Not_Found
+}
+
+// Delete Line if contains in file
+func Del_line(filename string, search string) string {
 	line := ""
 	file, err := os.Open(filename)
 	if err != nil {

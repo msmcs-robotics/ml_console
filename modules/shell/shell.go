@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	inst "ml_console/installer"
 	hosts "ml_console/modules/hosts"
 	uno "ml_console/modules/shell/submodules/uno_ssh"
 	sup "ml_console/support_functions"
@@ -87,14 +86,10 @@ func Connect(id string) {
 	mod := "host"
 	id = hosts.CheckId(mod, id)
 	if id != hosts.Invalid_id {
-		host := sup.Search_line(inst.Install_Config, "host_"+id)
-		user := sup.Search_line(inst.Install_Config, "ssh_user_"+id)
-		passw := sup.Search_line(inst.Install_Config, "ssh_pass_"+id)
-		port := sup.Search_line(inst.Install_Config, "ssh_port")
-		host = host[len("host_"+id+"::"):]
-		user = user[len("ssh_user_"+id+"::"):]
-		passw = passw[len("ssh_pass_"+id+"::"):]
-		port = port[len("ssh_port::"):]
+		host := hosts.Get_Host(id)
+		user := hosts.Get_User(id)
+		passw := hosts.Get_Passw(id)
+		port := hosts.Get_Port(id)
 		err := uno.Uno(host, user, passw, port)
 		if err == uno.Not_Connected {
 			fmt.Println(uno.Err1 + host + "...")
