@@ -40,7 +40,7 @@ var (
 	a_d  = "Add a host to the cluster"
 	d_d  = "Delete a host from the cluster"
 	p_d  = "Ping a node on the sshport \n" + tab_over + "Select use 'all' to Poke all"
-	pp_d = "Generate Commands for creating the \n" + tab_over + "first ssh to a host"
+	pp_d = "Generate a script and command to \n" + tab_over + "initialize an ssh connection with a node,\n" + tab_over + "adding it to your known_hosts file.\n" + tab_over + "Select use 'all' to Poke all"
 	//ID Check
 	Invalid_id = "invalid_id"
 

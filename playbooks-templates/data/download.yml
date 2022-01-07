@@ -1,0 +1,8 @@
+- name: down
+  hosts: all
+  become: true
+
+  tasks:
+      - fetch:
+          src: srcfile
+          dest: destfile

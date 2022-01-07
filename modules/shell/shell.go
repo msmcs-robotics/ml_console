@@ -45,6 +45,8 @@ var (
 	//Errs
 	Err1 = sup.Red + "scp up/down commands require a hostID, src, and dest file"
 	Err2 = sup.Red + "Options are limited to a hostID, src, and dest file"
+
+	run_data = `insert playbook here`
 )
 
 func Module_Menu() {
@@ -75,8 +77,8 @@ func Module_Menu_Logic(cmd string) {
 	// cut out Module initialization string and first space
 	cmd = cmd[len(Module_init_command)+1:]
 
-	if cmd == r {
-		fmt.Println(sup.Yellow + "Run submodule in progress...")
+	if strings.Contains(cmd, r) {
+		run(cmd)
 	} else if strings.Contains(cmd, h) {
 		Connect(cmd)
 	} else if strings.Contains(cmd, u) {
@@ -94,6 +96,19 @@ func Module_Menu_Logic(cmd string) {
 	}
 }
 
+func run(cmd string) {
+	mod := "run "
+	playbook := "playbooks/shell/run.yml"
+	search := "cmd"
+	cmd = cmd[len(mod):]
+	cmd = cmd[1 : len(cmd)-1]
+	cmd = "cmd: " + cmd
+	fmt.Println(cmd)
+	sup.Check_file_del(playbook)
+	sup.Gen_playbook(playbook, run_data)
+	sup.Replace(playbook, search, cmd)
+	sup.Run_Playbook(playbook)
+}
 func Connect(id string) {
 	mod := "host"
 	id = hosts.CheckId(mod, id)

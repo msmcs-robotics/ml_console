@@ -1,0 +1,9 @@
+- name: del
+  hosts: all
+  become: true
+
+  tasks:
+      - name: delete stuff
+        file:
+          state: absent
+          path: path2datasetORfolder

@@ -1,0 +1,9 @@
+- name: run
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: exec
+      ansible.builtin.shell:
+        cmd: uname -a

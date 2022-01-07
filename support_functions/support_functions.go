@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -42,6 +43,7 @@ var (
 
 	Err1 = Red + "Invalid Command"
 	Err2 = Red + "Invalid Option"
+	Err3 = Red + "Playbook not found"
 
 	//FS Reports
 	Not_Found = "Not Found"
@@ -205,4 +207,59 @@ func Del_line(filename string, search string) string {
 func Pause() {
 	fmt.Print("Press Enter to Continue...")
 	fmt.Scanln()
+}
+
+func Check_file_del(file string) {
+	cmd := Check_File(file)
+	if cmd == Not_Found {
+		fmt.Println(Err3)
+	} else {
+		err := os.Remove(file)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
+func Gen_playbook(playbook string, data string) {
+	fmt.Println(Green + "Generating...")
+	_, err := os.Create(playbook)
+	if err != nil {
+		fmt.Println(err)
+		Gen_playbook(playbook, data)
+	}
+	d := Add2file(playbook, data)
+	if d == Appn {
+		Clear()
+		fmt.Println(Appn)
+		Gen_playbook(playbook, data)
+	}
+}
+func Replace(playbook string, search string, data string) {
+	input, err := ioutil.ReadFile(playbook)
+	if err != nil {
+		fmt.Print(Red)
+		fmt.Println(err)
+	}
+	lines := strings.Split(string(input), "\n")
+	for i, line := range lines {
+		if strings.Contains(line, search) {
+			lines[i] = data
+		}
+	}
+	output := strings.Join(lines, "\n")
+	err = ioutil.WriteFile(playbook, []byte(output), 0644)
+	if err != nil {
+		fmt.Print(Red)
+		fmt.Println(err)
+	}
+	fmt.Println(Green + "Generated playbook.")
+}
+func Run_Playbook(playbook string) {
+	fmt.Println(Green + "Running playbook...")
+	cmd := exec.Command("ansible-playbook", playbook)
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	if err := cmd.Run(); err != nil {
+		fmt.Println(err)
+	}
 }

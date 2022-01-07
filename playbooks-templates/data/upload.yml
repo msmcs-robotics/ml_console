@@ -1,0 +1,11 @@
+- name: up
+  hosts: all
+  become: true
+
+  tasks:
+      - name: upload
+        copy:
+          src: srcfile
+          dest: destfile
+          owner: username
+          mode: 0777
