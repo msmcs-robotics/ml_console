@@ -1,0 +1,55 @@
+- name: install tools and setups nodes
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: networking, update, upgrade 
+      ansible.builtin.shell:
+        cmd: | 
+          echo "nameserver 1.1.1.1" > /etc/resolv.conf
+          echo "nameserver 1.0.0.1" >> /etc/resolv.conf
+          pacman -Sy
+          pacman -Syu
+
+    - name: More sys packages
+      ansible.builtin.shell:
+        cmd: |
+          pacman -S vim gcc base-devel cmake \ 
+            linux-headers-`uname -r` bc dkms \ 
+            git docker ffmpeg gdb \
+            speedtest-cli iperf3 curl wget \
+
+    - name: install programming language support
+      ansible.builtin.shell:
+        cmd: pacman -S python
+        cmd: curl https://sh.rustup.rs -sSf -y | sh
+        cmd: |
+          wget -c https://dl.google.com/go/go${go_version}.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+          echo "PATH='/usr/local/go/bin:$PATH'" > ~/.bashrc
+
+     - name: install cuda
+      ansible.builtin.shell:
+        cmd: pacman -S cuda=11.3.1-1 cuda-tools=11.3.1-1 nvtop
+
+    - name: install pytorch
+      ansible.builtin.shell:
+        cmd: pip3 install torch==1.10.1+cu113 torchvision==0.11.2+cu113 torchaudio==0.10.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+
+    - name: more PIPY
+      ansible.builtin.shell:
+        cmd: | 
+          pip3 isntall pytorch-lightning \
+               numpy scipy matplotlib pandas nose tk \
+               argparse imutils tqdm rich \
+               jupyter jupyterlab \
+               opencv-python
+
+    - name: Reboot host and wait for it to restart
+      reboot:
+        msg: "Reboot initiated by Ansible"
+        connect_timeout: 5
+        reboot_timeout: 600
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: whoami

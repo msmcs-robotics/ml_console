@@ -1,0 +1,64 @@
+- name: install tools and setups nodes
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: networking, update, upgrade 
+      ansible.builtin.shell:
+        cmd: | 
+          echo "nameserver 1.1.1.1" > /etc/resolv.conf
+          echo "nameserver 1.0.0.1" >> /etc/resolv.conf
+          apt update -y
+          apt upgrade -y
+
+    - name: More sys packages
+      ansible.builtin.shell:
+        cmd: |
+          apt install -fy vim gcc g++ build-essential cmake \ 
+            linux-headers-`uname -r` bc dkms \ 
+            git docker.io ffmpeg gdb \
+            speedtest-cli iperf3 curl wget \
+            
+          apt --fix-broken install
+
+    - name: install programming language support
+      ansible.builtin.shell:
+        cmd: apt install -fy python3 python3-pip python3-dev
+        cmd: curl https://sh.rustup.rs -sSf -y | sh
+        cmd: |
+          wget -c https://dl.google.com/go/go${go_version}.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+          echo "PATH='/usr/local/go/bin:$PATH'" > ~/.bashrc
+
+    - name: install cuda
+      ansible.builtin.shell:
+        cmd: | 
+          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+          mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+          wget https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
+          dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
+          apt-key add /var/cuda-repo-ubuntu2004-11-3-local/7fa2af80.pub
+          apt-get update
+          apt-get -y install cuda nvtop
+
+    - name: install pytorch
+      ansible.builtin.shell:
+        cmd: pip3 install torch==1.10.1+cu113 torchvision==0.11.2+cu113 torchaudio==0.10.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+
+    - name: more PIPY
+      ansible.builtin.shell:
+        cmd: | 
+          pip3 isntall pytorch-lightning \
+               numpy scipy matplotlib pandas nose tk \
+               argparse imutils tqdm rich \
+               jupyter jupyterlab \
+               opencv-python
+
+    - name: Reboot host and wait for it to restart
+      reboot:
+        msg: "Reboot initiated by Ansible"
+        connect_timeout: 5
+        reboot_timeout: 600
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: whoami
