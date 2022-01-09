@@ -15,7 +15,7 @@ These tools are a neccessity for scripts to execute properly.
 The listed command is for Ubuntu 20.04.
 
 ```
-sudo apt install -fy ssh-client sed
+sudo apt install -fy ssh-client sed ansible
 ```
 
 ## A High Level Overview
