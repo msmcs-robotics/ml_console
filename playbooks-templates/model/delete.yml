@@ -6,4 +6,4 @@
       - name: delete stuff
         file:
           state: absent
-          path: path2model
+          path: path2data

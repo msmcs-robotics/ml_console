@@ -301,7 +301,7 @@ func Ping(id string) {
 		host := sup.Search_line(inst.Install_Config, "host_"+id)
 		port := sup.Search_line(inst.Install_Config, "ssh_port")
 		host = host[len("host_"+id+"::"):]
-		port = port[len("ssh_port::"):]
+		port = port[len("ssh_port_"+id+"::"):]
 		fmt.Println(sup.Yellow + "Pinging " + host + " on port " + port)
 		timeout := 3 * time.Second
 		conn, err := net.DialTimeout("tcp", net.JoinHostPort(host, port), timeout)

@@ -6,4 +6,4 @@
       - name: delete stuff
         file:
           state: absent
-          path: path2datasetORfolder
+          path: path2data

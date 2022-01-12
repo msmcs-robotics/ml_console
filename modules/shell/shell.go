@@ -36,7 +36,7 @@ var (
 
 	r_d  = "Run a shell command on all hosts"
 	h_d  = "Spawn an interactive ssh shell on specified host"
-	u_d  = "Upload a dataset"
+	u_d  = "Upload a file"
 	c_d  = "Run a series of system checks"
 	up_d = "Update the app repositories of all nodes"
 	ug_d = "Upgrade the OS of all nodes"
